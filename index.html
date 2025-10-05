@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulArcana X CosmicPath</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="tailwind.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        body {
+            background: #ffffff;
+            color: #222;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        /* Header / Banner */
+        #logo{
+            border-radius: 50%;
+            background: transparent;
+        }
+        .banner {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #92b0d2 0%, #b3d8ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+        }
+        .banner-text {
+            flex: 2;
+            min-width: 250px;
+        }
+        .banner-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #0800ff;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .banner-subtitle {
+            font-size: 1.5rem;
+            color: #3f01fa;
+            margin-bottom: 1.5rem;
+        }
+        .banner-desc {
+            font-size: 1.1rem;
+            color: #050202;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        .banner-photo {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .banner-photo img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 6px solid #1c7fe2;
+            box-shadow: 0 8px 32px rgba(21,101,192,0.15);
+            background: #e3f0ff;
+        }
+        /* Special Typewriter Effect */
+        .special-type {
+            font-size: 1.5rem;
+            color: #7004f5;
+            min-height: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 1.2rem;
+            height: 2.8rem;
+            display: flex;
+            align-items: center;
+        }
+        .type-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: #8103ee;
+            margin-left: 4px;
+            animation: blink 1s steps(1) infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        /* Discount Card */
+        .discount-card {
+            background: linear-gradient(90deg, #0400ff 0%, #260459 100%);
+            color: #00e5ff;
+            padding: 2rem;
+            margin: 2rem auto;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 800px;
+            box-shadow: 0 10px 3px rgba(12, 3, 3, 0.12);
+            position: relative;
+        }
+        .discount-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ff0000;
+        }
+        .discount-price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #ffffff;
+        }
+        .discount-timer {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        /* Section Headings */
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+            color: #086acc;
+            letter-spacing: 1px;
+        }
+        /* About Section */
+        .about-section {
+            padding: 4rem 2rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .profiles-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .profile-card {
+            background: #e9f1f9;
+            border-radius: 15px;
+            padding: 2rem;
+            flex: 1;
+            min-width: 260px;
+            max-width: 400px;
+            box-shadow: 15px 10px rgba(0, 4, 8, 0.08);
+            border: 2.7px solid #048af7;
+            transition: transform 0.3s;
+        }
+        .profile-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(32, 90, 149, 0.13);
+        }
+        .profile-name {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #3e05f9;
+            font-weight: 600;
+        }
+        .profile-exp {
+            font-size: 1rem;
+            margin-bottom: 0.7rem;
+            color: #0173f5;
+        }
+        /* Services Section */
+        .services-section {
+            padding: 4rem 2rem 2rem 2rem;
+            background: #f9fafa;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: #e7eff7;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 2.8px solid #9079f5;
+            box-shadow: 2px 10px rgba(0, 6, 13, 0.07);
+        }
+        .service-card:hover {
+            transform: scale(1.04);
+            border-color: #1062b4;
+            box-shadow: 0 0 20px rgba(25, 118, 210, 0.13);
+        }
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.7rem;
+            color: #0d82f7;
+        }
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.7rem;
+            color: #0275f7;
+            font-weight: 600;
+        }
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 4rem 2rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .testimonial-card {
+            background: #f5faff;
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 7px solid #067cf3;
+            box-shadow: 2px 10px rgba(25, 118, 210, 0.07);
+            transition: transform 0.3s;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.2rem;
+            color: #080808;
+        }
+        .testimonial-author {
+            text-align: right;
+            color: #037ef8;
+            font-weight: bold;
+        }
+        /* Footer */
+        footer {
+            background: #e3f0ff;
+            padding: 3rem 2rem 1rem 2rem;
+            border-top: 2px solid #b1d0ee;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        .footer-logo {
+            flex: 1;
+            min-width: 220px;
+        }
+        .footer-logo h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.7rem;
+            color: #0280ff;
+            font-weight: bold;
+        }
+        .social-icons {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 1rem;
+        }
+        .social-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            background: #2704c4;
+            border-radius: 50%;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-icon:hover {
+            background: #64b5f6;
+            color: #1976d2;
+            transform: scale(1.1);
+        }
+        .footer-links {
+            flex: 1;
+            min-width: 160px;
+        }
+        .footer-links h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+            color: #21029c;
+        }
+        .footer-links ul {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 0.4rem;
+        }
+        .footer-links a {
+            color: #01366b;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #64b5f6;
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #0e7cd6;
+            color: #0424f6;
+            font-size: 1rem;
+        }
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .banner-content {
+                flex-direction: column;
+                gap: 2rem;
+                padding: 1.5rem;
+            }
+            .banner-photo img {
+                width: 160px;
+                height: 160px;
+            }
+        }
+        @media (max-width: 600px) {
+            .banner-title {
+                font-size: 2.1rem;
+            }
+            .banner-subtitle {
+                font-size: 1.1rem;
+            }
+            .banner-content {
+                padding: 1rem;
+            }
+            .discount-card {
+                padding: 1.2rem;
+            }
+            .about-section, .services-section, .testimonials-section {
+                padding: 2rem 0.5rem 1rem 0.5rem;
+            }
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with logo and hamburger -->
+    <header style="position: relative; z-index: 10; width: 100%; background: rgba(255,255,255,0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.07);">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; max-width: 1400px; margin: 0 auto;">
+            <div class="flex items-center space-x-2">
+                <img id="logo" src="astro3.jpeg" alt="Logo" style="height:64px; width:auto; object-fit:contain; background:transparent;" />
+                <span>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-500 to-blue-400 bg-clip-text text-transparent" style="background: linear-gradient(to right, #05e99d, #0161fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.5rem;">SoulArcana</h1>
+                </span>
+                
+            </div>
+            <!-- Hamburger menu at top right -->
+            <div class="hamburger" id="hamburger" style="position: relative; cursor:pointer;">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <!-- Navigation menu (hidden by default, shown on hamburger click) -->
+        <ul class="nav-menu" id="navMenu" style="position: absolute; top: 100%; right: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: none; flex-direction: column; min-width: 160px; padding: 0.5rem 0; z-index: 1001;">
+            <ul><a href="index.html" class="nav-link" style="display:block; padding: 0.7rem 1.5rem; color: #1976d2; text-decoration: none;">Home</a></ul>
+            <ul><a href="service.html" class="nav-link" style="display:block; padding: 0.7rem 1.5rem; color: #0570da; text-decoration: none;">Our Services</a></ul>
+        </ul>
+    </header>
+    <!-- Banner Section -->
+    <!-- ...existing code... -->
+<section class="banner" style="position: relative; overflow: hidden;">
+    <!-- Astrological chart background image -->
+    <img 
+        src="banner.jpeg"
+        alt="Astrological Chart Background"
+        style="
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 1200px; max-width: 120vw;
+            min-width: 100vw;
+            height: auto;
+            min-height: 100vh;
+            transform: translate(-50%, -50%);
+            opacity: 0.18;
+            z-index: 0;
+            pointer-events: none;
+            object-fit: cover;
+        "
+        aria-hidden="true"
+    >
+    <div class="banner-content" style="position: relative; z-index: 1;">
+        <div class="banner-text">
+            <h1 class="banner-title">SoulArcana x CosmicPath</h1>
+            <p class="banner-subtitle">Discover Your Soul's Journey Through Astrology</p>
+            <p class="banner-desc">
+                Unlock the secrets of your cosmic blueprint with our expert astrologers. 
+                We blend ancient wisdom with modern insight to guide you on your unique path — whether it's love, career, or self-discovery. 
+                Begin your transformation today and step into your true potential...
+            </p>
+            <div class="special-type" id="specialType"></div>
+        </div>
+    </div>
+</section>
+<!-- ...existing code... -->
+
+    <!-- Discount Card -->
+    <section class="discount-card">
+        <h2 class="discount-title">Special Limited Time Offer!</h2>
+        <p>All our premium astrological services are now available at an incredible price</p>
+        <div class="discount-price">₹77</div>
+        <p>For the next 7 days only</p>
+        <div class="discount-timer" id="countdown">Offer ends in: 7 days 00:00:00</div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <h2 class="section-title">Meet Our Expert Astrologers</h2>
+        <div class="profiles-container">
+            <div class="profile-card">
+                <h3 class="profile-name">Ananya Halder</h3>
+                <p class="profile-exp">2+ Years of Experience</p>
+                <p>Ananya is a gifted Tarot Card Reader and Spiritual Coach who offers more than predictions—she provides clarity and guidance to transform lives. With deep insight into past, present, and future energies, she helps individuals release limiting patterns, connect with inner wisdom, and embrace their true purpose.</p>
+                <p>Her mission is to empower others with confidence, clarity, and unshakeable self-belief with the help of Spiritual Power.</p>
+            </div>
+            <div class="profile-card">
+                <h3 class="profile-name">Sumana Parua</h3>
+                <p class="profile-exp">6+ Years of Experience</p>
+                <p>Sumana Parua is an expert Astrologer, Palmist, and Numerologist, guiding individuals through the mysteries of life with profound accuracy. Blending Western and Eastern traditions, she specializes in relationship compatibility, life purpose, career insights, and past life goals.</p>
+                <p>With her compassionate approach and deep wisdom, Sumana helps people align with their true path, offering clarity, confidence, and direction for a brighter future.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">♋</div>
+                <h3 class="service-title">Birth Chart Analysis</h3>
+                <p>Detailed analysis of your natal chart to understand your personality, strengths, and life path.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">♎</div>
+                <h3 class="service-title">Relationship Compatibility</h3>
+                <p>Explore the cosmic connection between you and your partner for deeper understanding.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">♑</div>
+                <h3 class="service-title">Career Guidance</h3>
+                <p>Align your professional path with your cosmic blueprint for success and fulfillment.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🌙</div>
+                <h3 class="service-title">Past Life Regression</h3>
+                <p>Discover your past lives and understand how they influence your current journey.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⭐</div>
+                <h3 class="service-title">Soul Purpose Reading</h3>
+                <p>Uncover your soul's mission and the lessons you're here to learn in this lifetime.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🌀</div>
+                <h3 class="service-title">Karmic Clearing</h3>
+                <p>Identify and release karmic patterns that may be holding you back from your true potential.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I was struggling with marriage delays and constant obstacles. Sumana ji carefully studied my chart, identified my Manglik Dosha, and guided me with spiritual remedies. Her predictions about my marriage turned true, and today I am happily settled. She changed my life."</p>
+                <p class="testimonial-author">- Sapna Dutta.</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I was struggling in my relationship, full of confusion about my partner’s feelings and our future. Ananya’s tarot reading and guidance brought me clarity and peace. She not only explained the energies around us but also gave me confidence to heal and strengthen my bond."</p>
+                <p class="testimonial-author">- Sneha Paramink.</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"As a newly married couple, my wife and I were facing constant misunderstandings. Sumana ji matched our charts, explained our compatibility, and gave remedies that truly worked. Her guidance saved our relationship."</p>
+                <p class="testimonial-author">- Vikash Yadav.</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"I was lost in my career with no sense of direction. Sumana ji’s readings helped me uncover my true strengths and choose the right path. I now feel confident and focused about my future."</p>
+                <p class="testimonial-author">- Gourav Dasgupta.</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Sumana ji’s astrological wisdom and Ananya’s tarot insights gave me unmatched clarity. Their guidance brought peace, direction, and confidence into my life."</p>
+                <p class="testimonial-author">- Amit Roy.</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Sumana is one of my close friends since childhood, she has predicted a lot of things in my life, starting from exams to career. I really believe that God has written everything about us, and astrology is the way to understand that language. It won't change our lives, but after understanding our future problems, we can prepare ourselves to face them."</p>
+                <p class="testimonial-author">- Arijit Sarkar.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h3>SoulArcana & CosmicPath</h3>
+                <p>Your guide to understanding the cosmic influences on your soul's journey.</p>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/cosmicsoularcana?igsh=ZmRkYTE1YnVzaHJ4" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="far fa-envelope"></i></a>
+                    <a href="#" class="social-icon"><i class="fas fa-phone"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Our Services</h4>
+                <ul>
+                    <li><a href="#">Birth Chart Analysis</a></li>
+                    <li><a href="#">Relationship Compatibility</a></li>
+                    <li><a href="#">Career Guidance</a></li>
+                    <li><a href="#">Past Life Regression</a></li>
+                    <li><a href="#">Soul Purpose Reading</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Kolkata , India</li>
+                    <li style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: larger;"><i class="fas fa-phone"></i> +91 62896 32897</li>
+                    <li><i class="far fa-envelope"></i> soularcanawithcosmicpath@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 SoulArcana & CosmicPath. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Typewriter effect for special roles
+        const roles = [
+            "Astrological Predictions",
+            "Career Guidance",
+            "Spiritual Mentoring",
+            "Relationship Guidance"
+        ];
+        let roleIndex = 0, charIndex = 0, typing = true;
+        const specialType = document.getElementById('specialType');
+        function typeRole() {
+            if (typing) {
+                if (charIndex <= roles[roleIndex].length) {
+                    specialType.innerHTML = roles[roleIndex].slice(0, charIndex) + '<span class="type-cursor"></span>';
+                    charIndex++;
+                    setTimeout(typeRole, 80);
+                } else {
+                    typing = false;
+                    setTimeout(typeRole, 1200);
+                }
+            } else {
+                if (charIndex > 0) {
+                    specialType.innerHTML = roles[roleIndex].slice(0, charIndex - 1) + '<span class="type-cursor"></span>';
+                    charIndex--;
+                    setTimeout(typeRole, 40);
+                } else {
+                    typing = true;
+                    roleIndex = (roleIndex + 1) % roles.length;
+                    setTimeout(typeRole, 400);
+                }
+            }
+        }
+        typeRole();
+
+        // Countdown timer for discount
+        function updateCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            // Set your offer end date here (e.g., 7 days from first page load)
+            // For demonstration, let's set a fixed end date 7 days from now on first load
+            let offerEnd = localStorage.getItem('offerEndDate');
+            if (!offerEnd) {
+                const now = new Date();
+                now.setDate(now.getDate() + 7);
+                offerEnd = now.toISOString();
+                localStorage.setItem('offerEndDate', offerEnd);
+            }
+            const endDate = new Date(offerEnd);
+            const now = new Date();
+            const timeRemaining = endDate - now;
+            if (timeRemaining <= 0) {
+                countdownElement.textContent = "Offer has expired!";
+                return;
+            }
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            countdownElement.textContent = `Offer ends in: ${days} days ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+        // Hide menu when clicking a link (mobile UX)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.style.display = 'none';
+            });
+        });
+    </script>
+    <style>
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            z-index: 1001;
+        }
+        .hamburger span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background: #3b82f6;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        .nav-menu.show {
+            display: flex !important;
+        }
+        @media (max-width: 600px) {
+            .hamburger {
+                width: 26px;
+                height: 18px;
+            }
+            #logo {
+                height: 44px !important;
+            }
+        }
+    </style>
+</body>
+</html>
